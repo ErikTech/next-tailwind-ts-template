@@ -1,8 +1,9 @@
 import React from 'react'
+import { useWeb3Context } from '../context/Web3Context'
 import { useWeb3 } from '../hooks/'
 
 export function Web3Address() {
-  const { address } = useWeb3()
+  const { address } = useWeb3Context()
 
   return (
     <div className="flex items-center justify-center">

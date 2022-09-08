@@ -2,17 +2,23 @@ import { ethers } from 'ethers'
 
 export type Web3ProviderState = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    provider: any 
+    provider: any
+    jsonProvider: ethers.providers.JsonRpcProvider | null  | undefined
     web3Provider: ethers.providers.Web3Provider | null | undefined
     address: string | null | undefined
-    network: ethers.providers.Network | null | undefined
+    network: ethers.providers.Network | null | undefined,
+    connect: (() => Promise<void>) | null,
+    disconnect: (() => Promise<void>) | null
   }
 
 export const web3InitialState: Web3ProviderState = {
     provider: null,
+    jsonProvider: null,
     web3Provider: null,
     address: null,
     network: null,
+    connect: null,
+    disconnect: null,
 }
 
 //ACTION for switch in reducer
@@ -20,6 +26,7 @@ export type Web3Action =
   | {
       type: 'SET_WEB3_PROVIDER'
       provider?: Web3ProviderState['provider']
+      jsonProvider?: Web3ProviderState['jsonProvider']
       web3Provider?: Web3ProviderState['web3Provider']
       address?: Web3ProviderState['address']
       network?: Web3ProviderState['network']
@@ -46,6 +53,7 @@ export type Web3Action =
             return {
               ...state,
               provider: action.provider,
+              jsonProvider: action.jsonProvider,
               web3Provider: action.web3Provider,
               address: action.address,
               network: action.network,

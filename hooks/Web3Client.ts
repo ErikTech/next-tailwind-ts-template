@@ -19,9 +19,9 @@ const providerOptions = {
     package: WalletConnectProvider, // required
     options: {
       rpc: {
-        1: "https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0c"
+        1: "https://solemn-attentive-sound.quiknode.pro/"
       },
-      // infuraId: process.env.QN_API_KEY
+      infuraId: process.env.QN_API_KEY
       // rpcUrl: 'https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0c'
     },
   },
@@ -43,25 +43,31 @@ type Web3Client = Web3ProviderState & {
   
   export const useWeb3 = () => {
     const [state, dispatch] = useReducer(web3Reducer, web3InitialState)
-    const { provider, web3Provider, address, network } = state
+    const { provider, jsonProvider, web3Provider, address, network } = state
   
     const connect = useCallback(async () => {
       if (web3Modal) {
         try {
           const provider = await web3Modal.connect()
           const web3Provider = new ethers.providers.Web3Provider(provider)
+          const jsonProvider = new ethers.providers.JsonRpcProvider(provider)
+          // jsonProvider.getBlock()
           const signer = web3Provider.getSigner()
           const address = await signer.getAddress()
           const network = await web3Provider.getNetwork()
+          console.log(jsonProvider)
           
-          toast.success('Connected to Web3')
           dispatch({
             type: 'SET_WEB3_PROVIDER',
             provider,
+            jsonProvider,
             web3Provider,
             address,
             network,
           } as Web3Action)
+          console.log(provider, jsonProvider, web3Provider, signer, address, network)
+          toast.success('Connected to Web3')
+
         } catch (e) {
           console.log('connect error', e)
         }
@@ -96,7 +102,6 @@ type Web3Client = Web3ProviderState & {
     useEffect(() => {
       if (provider?.on) {
         const handleAccountsChanged = (accounts: string[]) => {
-          // before 'SET_ADDRESS' in handleAccountsChanged
           toast.info('Changed Web3 Account')
           dispatch({
             type: 'SET_ADDRESS',
@@ -108,7 +113,6 @@ type Web3Client = Web3ProviderState & {
         const handleChainChanged = (_hexChainId: string) => {
           if (typeof window !== 'undefined') {
             console.log('switched to chain...', _hexChainId)
-            // before 'window.location.reload()' in handleChainChanged
             toast.info('Web3 Network Changed')
             window.location.reload()
           } else {
@@ -139,6 +143,7 @@ type Web3Client = Web3ProviderState & {
   
     return {
       provider,
+      jsonProvider,
       web3Provider,
       address,
       network,
