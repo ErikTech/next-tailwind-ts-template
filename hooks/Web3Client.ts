@@ -19,8 +19,10 @@ const providerOptions = {
     package: WalletConnectProvider, // required
     options: {
       rpc: {
-        1: "https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0c/"
+        1: "https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0c"
       },
+      // infuraId: process.env.QN_API_KEY
+      // rpcUrl: 'https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0c'
     },
   },
 }
@@ -51,7 +53,8 @@ type Web3Client = Web3ProviderState & {
           const signer = web3Provider.getSigner()
           const address = await signer.getAddress()
           const network = await web3Provider.getNetwork()
-  
+          
+          toast.success('Connected to Web3')
           dispatch({
             type: 'SET_WEB3_PROVIDER',
             provider,
@@ -73,6 +76,7 @@ type Web3Client = Web3ProviderState & {
         if (provider?.disconnect && typeof provider.disconnect === 'function') {
           await provider.disconnect()
         }
+        toast.error('Disconnected from Web3')
         dispatch({
           type: 'RESET_WEB3_PROVIDER',
         } as Web3Action)
@@ -92,6 +96,8 @@ type Web3Client = Web3ProviderState & {
     useEffect(() => {
       if (provider?.on) {
         const handleAccountsChanged = (accounts: string[]) => {
+          // before 'SET_ADDRESS' in handleAccountsChanged
+          toast.info('Changed Web3 Account')
           dispatch({
             type: 'SET_ADDRESS',
             address: accounts[0],
@@ -102,6 +108,8 @@ type Web3Client = Web3ProviderState & {
         const handleChainChanged = (_hexChainId: string) => {
           if (typeof window !== 'undefined') {
             console.log('switched to chain...', _hexChainId)
+            // before 'window.location.reload()' in handleChainChanged
+            toast.info('Web3 Network Changed')
             window.location.reload()
           } else {
             console.log('window is undefined')
@@ -138,13 +146,3 @@ type Web3Client = Web3ProviderState & {
       disconnect,
     } as Web3Client
   }
-
-
-  // before 'SET_WEB3_PROVIDER' in connect
-toast.success('Connected to Web3')
-// before 'RESET_WEB3_PROVIDER' in disconnect
-toast.error('Disconnected from Web3')
-// before 'SET_ADDRESS' in handleAccountsChanged
-toast.info('Changed Web3 Account')
-// before 'window.location.reload()' in handleChainChanged
-toast.info('Web3 Network Changed')
