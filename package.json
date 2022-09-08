@@ -1,5 +1,7 @@
 {
+  "name": "next-ts-web3",
   "private": true,
+  "version": "0.1.0-alpha.0",
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -15,12 +17,15 @@
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.7",
+    "@walletconnect/web3-provider": "^1.8.0",
     "@web3-onboard/injected-wallets": "^2.2.1",
     "@web3-onboard/react": "^2.3.2",
     "ethers": "^5.7.0",
     "next": "latest",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-toastify": "^9.0.8",
+    "web3modal": "^1.9.9"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^4.1.3",
