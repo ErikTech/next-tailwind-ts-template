@@ -14,17 +14,18 @@ import {
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 
+
 const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
-    options: {
-      rpc: {
-        1: "https://solemn-attentive-sound.quiknode.pro/"
-      },
-      infuraId: process.env.QN_API_KEY
-      // rpcUrl: 'https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0c'
-    },
-  },
+    // options: {
+    //   rpc: {
+    //     1: "https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0"
+    //   },
+    //   // infuraId: process.env.QN_API_KEY
+    //   // rpcUrl: 'https://solemn-attentive-sound.quiknode.pro/02d34422ba38afc1832db6fa69657c3960cd5e0c'
+    // },
+  }
 }
 
 let web3Modal: Web3Modal | null
@@ -44,6 +45,14 @@ type Web3Client = Web3ProviderState & {
   export const useWeb3 = () => {
     const [state, dispatch] = useReducer(web3Reducer, web3InitialState)
     const { provider, jsonProvider, web3Provider, address, network } = state
+
+    const getInfo = useCallback(async () => {
+      if (web3Modal) {
+          console.log("TEST")
+          //get wallet stuff or whatever
+
+    }
+  }, [provider])
   
     const connect = useCallback(async () => {
       if (web3Modal) {
@@ -149,5 +158,6 @@ type Web3Client = Web3ProviderState & {
       network,
       connect,
       disconnect,
+      getInfo
     } as Web3Client
   }

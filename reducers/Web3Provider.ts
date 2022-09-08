@@ -8,7 +8,8 @@ export type Web3ProviderState = {
     address: string | null | undefined
     network: ethers.providers.Network | null | undefined,
     connect: (() => Promise<void>) | null,
-    disconnect: (() => Promise<void>) | null
+    disconnect: (() => Promise<void>) | null,
+    getInfo: (() => Promise<void>) | null
   }
 
 export const web3InitialState: Web3ProviderState = {
@@ -19,6 +20,7 @@ export const web3InitialState: Web3ProviderState = {
     network: null,
     connect: null,
     disconnect: null,
+    getInfo: null
 }
 
 //ACTION for switch in reducer
